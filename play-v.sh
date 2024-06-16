@@ -1,10 +1,46 @@
 #!/bin/bash
 
+# Function to display the help menu
+show_help() {
+    echo "Usage: play-v -on"
+    echo "Options:"
+    echo "  -on        Start the video streaming server"
+    echo "  -help      Display this help menu"
+}
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Check if the script is run with -help or --help argument
+if [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
+    show_help
+    exit 0
+fi
+
 # Check if the script is run with -on argument
 if [ "$1" != "-on" ]; then
-    echo "Usage: play-v -on"
+    echo "Invalid argument!"
+    show_help
     exit 1
 fi
+
+# Check for necessary packages and install if not present
+necessary_packages=("ffmpeg" "php")
+
+for package in "${necessary_packages[@]}"; do
+    if ! command_exists "$package"; then
+        read -p "$package is not installed. Do you want to install it? (y/n): " response
+        if [ "$response" == "y" ]; then
+            sudo apt-get update
+            sudo apt-get install -y "$package"
+        else
+            echo "$package is required. Exiting."
+            exit 1
+        fi
+    fi
+done
 
 # Create necessary directories if they don't exist
 mkdir -p templates static styles thumbnails
@@ -228,3 +264,15 @@ read -n 1 -s
 
 # Kill the PHP server process
 kill $!
+
+# Make the script executable
+chmod +x "$0"
+
+# If the script is not already in a PATH directory, offer to move it to /usr/local/bin
+if ! echo "$PATH" | grep -q "$(dirname "$0")"; then
+    read -p "Do you want to make this script executable from anywhere by moving it to /usr/local/bin? (y/n): " response
+    if [ "$response" == "y" ]; then
+        sudo mv "$0" /usr/local/bin/play-v
+        echo "Script moved to /usr/local/bin. You can now run it using the command 'play-v'."
+    fi
+fi
