@@ -6,6 +6,9 @@ Your own video streaming server for private network
 # About this tool 
 The tools created in the `play-v.sh` script, along with associated PHP and CSS files, offer several benefits and advanced functionalities for managing and streaming video content. Here’s a detailed list of their benefits and functionalities:
 
+![Screenshot 2024-06-16 012535](https://github.com/mashunterbd/Play-v/assets/108648096/5a63ba63-511f-42d5-b250-2b3044750a3f)
+
+
 1. **Video Streaming Server Setup:**
    - **Benefit:** Enables setting up a local web server for streaming video files.
    - **Functionality:** Utilizes PHP for handling video file metadata and streaming functionality.
