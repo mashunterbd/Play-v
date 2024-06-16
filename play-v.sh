@@ -7,17 +7,7 @@ if [ "$1" != "-on" ]; then
 fi
 
 # Create necessary directories if they don't exist
-mkdir -p templates static styles thumbnails
-
-# Generate thumbnails for video files
-for video in *.mp4 *.mkv; do
-    if [ -f "$video" ]; then
-        thumbnail="thumbnails/${video%.*}.png"
-        if [ ! -f "$thumbnail" ]; then
-            ffmpeg -i "$video" -ss 00:00:01.000 -vframes 1 "$thumbnail"
-        fi
-    fi
-done
+mkdir -p templates static styles
 
 # Create index.php
 cat << 'EOF' > index.php
@@ -27,6 +17,34 @@ cat << 'EOF' > index.php
     <title>Video Streaming Server</title>
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #000;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 30px solid #fff;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            transition: border-left-color 0.3s;
+        }
+        .circle:hover {
+            background-color: blue;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -46,14 +64,13 @@ cat << 'EOF' > index.php
                     preg_match('/Duration: (\d+:\d+:\d+\.\d+),/', $output, $duration);
                     preg_match('/, (\d+x\d+)[,\s]/', $output, $resolution);
 
-                    // Thumbnail path
-                    $thumbnail = 'thumbnails/' . pathinfo($video, PATHINFO_FILENAME) . '.png';
-
                     echo '
                     <div class="col-lg-3 col-md-4 col-xs-6 thumb">
                         <div class="card mb-4 shadow-sm">
                             <a href="stream.php?file=' . urlencode($video) . '">
-                                <img src="' . $thumbnail . '" class="card-img-top" alt="Play">
+                                <div class="circle">
+                                    <div class="play-icon"></div>
+                                </div>
                             </a>
                             <div class="card-body">
                                 <p class="card-text">' . $video . '</p>
@@ -201,10 +218,6 @@ EOF
 cat << 'EOF' > styles/style.css
 body {
     padding-top: 20px;
-}
-.card-img-top {
-    width: 100%;
-    height: auto;
 }
 EOF
 
