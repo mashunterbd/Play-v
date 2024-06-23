@@ -222,9 +222,35 @@ trap 'cleanup' EXIT
 # Start PHP server and allow stopping with a key press
 php -S 0.0.0.0:8000 &
 
+PHP_PID=$!
+
+# Generate QR code for the server URL
+generate_qr() {
+    local ip_address=$1
+    if command -v qrcode-terminal &> /dev/null; then
+        qrcode-terminal "http://${ip_address}:8000"
+    else
+        echo "qrcode-terminal is not installed. Please install it using 'npm install -g qrcode-terminal'"
+        exit 1
+    fi
+}
+
+# Check for IP addresses on wlan0 and wlan1
+wlan0_ip=$(ip addr show wlan0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+wlan1_ip=$(ip addr show wlan1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+if [ -n "$wlan0_ip" ]; then
+    generate_qr "$wlan0_ip"
+elif [ -n "$wlan1_ip" ]; then
+    generate_qr "$wlan1_ip"
+else
+    echo "No IP address found for wlan0 or wlan1. Generating QR code for localhost."
+    generate_qr "localhost"
+fi
+
 # Display message and wait for key press
 echo "If you want to close the server, press Enter or any key."
 read -n 1 -s
 
 # Kill the PHP server process
-kill $!
+kill $PHP_PID
