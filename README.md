@@ -1,5 +1,11 @@
-# Play-v
-![Blue Dynamic Fashion Special Sale Banner](https://github.com/mashunterbd/Play-v/assets/108648096/9f2ce63a-0c5a-42b9-a52f-a35caa74c6bf)
+# Play-V
+
+![Play Video ](https://img.shields.io/badge/Play%20Video%20-blueviolet?style=plastic) -
+![Latest Version ](https://img.shields.io/badge/Latest%20Version%20-brightgreen?style=flat) -
+![Made with](https://img.shields.io/badge/Made%20with-bash-%23000000?style=flat-square&logo=bash&logoColor=white&labelColor=%23ffff00) -
+![Thumbnails Support ](https://img.shields.io/badge/Thumbnails%20Support%20-blue?style=flat) -
+
+![Blue Dynamic Fashion Special Sale Banner](https://github.com/mashunterbd/Play-v/assets/108648096/9f2ce63a-0c5a-42b9-a52f-a35caa74c6bf) || ![Made by @mashunter](https://img.shields.io/badge/Made%20by%20%40mashunter-pink?style=flat-square)
 
 Your own video streaming server for private network 
 
